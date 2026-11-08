@@ -31,6 +31,18 @@
 
 ---
 
+## ▶ Watch: Scar Tissue in 2 minutes
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=lRY_A1eupAA">
+    <img src="https://img.youtube.com/vi/lRY_A1eupAA/maxresdefault.jpg" alt="Watch Scar Tissue on YouTube — the coding agent that learns from failure and forgets what doesn't help" width="720">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=lRY_A1eupAA"><strong>Watch on YouTube</strong></a> — the failure problem, the train → distill → ablate → eval loop, a dashboard walkthrough with popup callouts, one failure traced start to finish, and the measured results.
+</p>
+
 ## Why Scar Tissue?
 
 Most agent memory is append-only. Every reflection gets saved, and memory slowly fills with vague advice and confidently wrong rules. The agent doesn't get smarter — it gets noisier.
