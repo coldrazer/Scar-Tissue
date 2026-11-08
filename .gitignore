@@ -1,0 +1,6 @@
+.env
+runs/
+LESSONS.md
+__pycache__/
+*.pyc
+.venv/

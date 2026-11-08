@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scar Tissue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #EEF2F1;
+  --sheet: #F7F9F8;
+  --ink: #1C2A29;
+  --ink-2: #4A5958;
+  --ink-3: #7B8988;
+  --grid: #CAD5D3;
+  --grid-2: #DEE6E4;
+  --teal: #2D6B65;
+  --teal-wash: #D5E5E2;
+  --scar: #B9536A;
+  --scar-wash: #F2DCE1;
+  --iodine: #A8731C;
+  --iodine-wash: #F1E4CC;
+  --sans: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #142120; --sheet: #1A2928; --ink: #E3ECEA; --ink-2: #AEBDBB; --ink-3: #7F918F;
+    --grid: #2F4442; --grid-2: #233533; --teal: #6DB5AC; --teal-wash: #1F3A37;
+    --scar: #E07C93; --scar-wash: #3A2228; --iodine: #D9A24A; --iodine-wash: #3A2E19;
+  }
+}
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 400 15px/1.5 var(--sans); font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1240px; margin: 0 auto; padding: 28px 32px 64px; }
+
+/* header */
+header { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap;
+  padding-bottom: 20px; border-bottom: 2px solid var(--ink); }
+h1 { margin: 0; font: 800 44px/1 var(--sans); font-stretch: 78%; letter-spacing: -0.01em; }
+.tagline { margin: 6px 0 0; color: var(--ink-2); font-size: 16px; max-width: 60ch; }
+.run { text-align: right; font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+.run strong { color: var(--ink); font-weight: 600; }
+.pulse { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--ink-3);
+  margin-right: 6px; vertical-align: 0; }
+.pulse.on { background: var(--teal); animation: beat 1.2s ease-in-out infinite; }
+@keyframes beat { 0%,100% { opacity: 1 } 50% { opacity: .25 } }
+
+/* hero */
+.hero { display: grid; grid-template-columns: 250px 1fr; gap: 32px; padding: 28px 0 24px; align-items: stretch; }
+.reading { display: flex; flex-direction: column; justify-content: space-between; gap: 20px; }
+.big { font: 700 112px/0.85 var(--sans); font-stretch: 75%; letter-spacing: -0.03em; color: var(--teal); }
+.big small { font-size: 44px; letter-spacing: 0; }
+.reading p { margin: 10px 0 0; color: var(--ink-2); max-width: 24ch; }
+.facts { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 14px; }
+.facts b { font-weight: 700; font-size: 20px; text-align: right; }
+.facts span { color: var(--ink-2); align-self: center; }
+.chart-sheet { background: var(--sheet); border: 1px solid var(--grid); border-radius: 3px; padding: 14px 16px 8px; min-width: 0; }
+.chart-head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--ink-2); }
+.chart-head h2 { margin: 0; font: 600 15px/1.3 var(--sans); color: var(--ink); }
+.legend { display: flex; gap: 18px; align-items: center; }
+.legend i { display: inline-block; width: 22px; height: 0; border-top: 3px solid var(--teal); vertical-align: middle; margin-right: 6px; }
+.legend i.ctl { border-top: 2px dashed var(--ink-3); }
+svg text { font-family: var(--sans); }
+#chart { width: 100%; height: auto; display: block; }
+
+/* rules strip */
+.rules { padding: 18px 0 26px; border-bottom: 1px solid var(--grid); }
+.rules h2, .col h2 { margin: 0 0 12px; font: 600 17px/1.3 var(--sans); }
+.rules h2 em { font-style: normal; color: var(--ink-2); font-weight: 400; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-size: 13px; padding: 5px 11px 5px 9px; border-radius: 99px; border: 1px solid var(--grid);
+  color: var(--ink-2); background: var(--sheet); }
+.chip::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--grid); margin-right: 7px; vertical-align: 1px; }
+.chip.held { color: var(--ink); border-color: var(--teal); }
+.chip.held::before { background: var(--teal); }
+.chip.broken { border-color: var(--scar); }
+.chip.broken::before { background: var(--scar); }
+
+/* memory */
+.memory { display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; padding: 28px 0; border-bottom: 1px solid var(--grid); }
+.col .sub { margin: -8px 0 14px; color: var(--ink-2); font-size: 14px; max-width: 62ch; }
+.lessons { list-style: none; margin: 0; padding: 0; }
+.lesson { padding: 12px 0 12px 14px; border-left: 3px solid var(--teal); margin-bottom: 10px; }
+.lesson.probation { border-left-color: var(--iodine); }
+.lesson.fresh { animation: arrive 2.4s ease-out; }
+@keyframes arrive { from { background: var(--teal-wash); } to { background: transparent; } }
+.lesson p { margin: 0 0 6px; font: 400 16px/1.55 var(--serif); max-width: 70ch; }
+.meta { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12.5px; color: var(--ink-3); align-items: center; }
+.meta .id { color: var(--ink-2); font-weight: 600; }
+.score { display: inline-flex; align-items: center; gap: 6px; }
+.score .bar { width: 64px; height: 6px; background: var(--grid-2); border-radius: 3px; overflow: hidden; }
+.score .bar span { display: block; height: 100%; background: var(--teal); }
+.probation .score .bar span { background: var(--iodine); }
+.tag-global { color: var(--teal); font-weight: 600; }
+.graveyard .lesson { border-left: 3px dotted var(--scar); }
+.graveyard .lesson p.text { text-decoration: line-through; text-decoration-color: var(--scar);
+  text-decoration-thickness: 1.5px; color: var(--ink-2); }
+.graveyard .lesson.fresh { animation: excise 2.4s ease-out; }
+@keyframes excise { from { background: var(--scar-wash); } to { background: transparent; } }
+.lesson p.reason { font: 400 13px/1.45 var(--sans); color: var(--ink-2); margin: 4px 0 0; max-width: 62ch; }
+.empty { color: var(--ink-3); font-size: 14px; padding: 8px 0; max-width: 46ch; }
+
+/* bottom */
+.lower { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 28px 0 0; }
+.grid-table { border-collapse: collapse; font-size: 13px; }
+.grid-table th { font-weight: 400; color: var(--ink-3); padding: 0 4px 6px; text-align: center; }
+.grid-table th.task { text-align: left; color: var(--ink-2); padding-right: 14px; font-weight: 500; white-space: nowrap; }
+.grid-table td { padding: 3px 4px; text-align: center; }
+.cell { display: inline-block; width: 16px; height: 16px; border-radius: 3px; }
+.cell.pass { background: var(--teal); }
+.cell.fail { border: 1.5px solid var(--scar); background: var(--scar-wash); }
+.log { list-style: none; margin: 0; padding: 0; max-height: 440px; overflow: auto; font-size: 13.5px; }
+.log li { display: grid; grid-template-columns: 70px 1fr; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--grid-2); }
+.log .k { color: var(--ink-3); font-size: 12px; padding-top: 1px; }
+.log .k.lesson, .log .k.keep { color: var(--teal); }
+.log .k.prune, .log .k.train_fail { color: var(--scar); }
+.log .k.epoch { color: var(--ink); font-weight: 700; }
+.log li.ev-epoch .m { font-weight: 600; }
+.log .m { word-break: break-word; }
+footer { margin-top: 40px; color: var(--ink-3); font-size: 13px; max-width: 80ch; }
+:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+@media (max-width: 880px) {
+  .wrap { padding: 20px 16px 48px; }
+  .hero, .memory, .lower { grid-template-columns: 1fr; gap: 24px; }
+  .big { font-size: 88px; }
+  .run { text-align: left; }
+  .grid-wrap { overflow-x: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse.on, .lesson.fresh, .graveyard .lesson.fresh { animation: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Scar Tissue</h1>
+      <p class="tagline">A coding agent that turns every failure into a lesson, and keeps a lesson only while removing it would make the agent worse.</p>
+    </div>
+    <div class="run" id="run">Connecting…</div>
+  </header>
+
+  <section class="hero" aria-label="Learning curve">
+    <div class="reading">
+      <div>
+        <div class="big" id="big">–</div>
+        <p id="bigcap">of held-out tasks passed on the first try.</p>
+      </div>
+      <div class="facts" id="facts"></div>
+    </div>
+    <div class="chart-sheet">
+      <div class="chart-head">
+        <h2>First-try pass rate on tasks the agent never trains on</h2>
+        <div class="legend" id="legend"><span><i></i>Scar Tissue</span></div>
+      </div>
+      <svg id="chart" viewBox="0 0 800 330" role="img" aria-label="Pass rate by epoch"></svg>
+    </div>
+  </section>
+
+  <section class="rules">
+    <h2>House rules the agent follows on held-out tasks <em id="rulecount"></em></h2>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <section class="memory">
+    <div class="col">
+      <h2>Living memory</h2>
+      <p class="sub">Lessons ranked by measured value: how many more checks pass with the lesson than without it. Amber means it hasn't proven itself yet.</p>
+      <ul class="lessons" id="alive"></ul>
+    </div>
+    <div class="col graveyard">
+      <h2>Pruned</h2>
+      <p class="sub">Lessons that hurt, never helped, or were outranked. Each was tested by re-running its most relevant tasks without it.</p>
+      <ul class="lessons" id="dead"></ul>
+    </div>
+  </section>
+
+  <section class="lower">
+    <div class="col">
+      <h2>Held-out tasks by epoch</h2>
+      <div class="grid-wrap"><table class="grid-table" id="evalgrid"></table></div>
+    </div>
+    <div class="col">
+      <h2>Activity</h2>
+      <ul class="log" id="log"></ul>
+    </div>
+  </section>
+
+  <footer id="foot">Each epoch: attempt the training tasks with test feedback, distill failures into lessons, ablate every lesson, then score the held-out tasks with memory read-only.<br>Built on the Meta ecosphere — Meta Wonder, Meta Spark, and Muse Glimmer.<br>Research: Subquadratic (SubQ) &middot; Front-end schema: Fetch.ai &middot; Benchmark testing: Google Gemini</footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pct = x => Math.round((x || 0) * 100);
+const seen = new Set();
+let first = true;
+
+const RULE_NAMES = {
+  result_envelope: "Return {ok, value | error}, never raise",
+  error_codes: "UPPER_SNAKE error codes",
+  money_cents: "Money is integer cents",
+  iso_dates: "Dates are YYYY-MM-DD",
+  sorted_ids: "Id lists sorted ascending",
+  id_format: "Ids like inv_000042",
+  split_remainder: "Leftover cents go to the first shares",
+  name_normalize: "Names in Title Case, single spaces",
+};
+
+function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+function chart(epochs, control) {
+  const W = 800, H = 330, L = 44, R = 34, T = 14, B = 92, ph = H - T - B;
+  const n = Math.max(epochs.length, control ? control.length : 0, 2);
+  const x = i => L + (W - L - R) * (i / (n - 1));
+  const y = v => T + ph * (1 - v);
+  let s = "";
+  // chart-paper grid: minor every 10%, major every 50%
+  for (let v = 0; v <= 100; v += 10) {
+    const major = v % 50 === 0;
+    s += `<line x1="${L}" x2="${W - R}" y1="${y(v / 100)}" y2="${y(v / 100)}" stroke="${css(major ? "--grid" : "--grid-2")}" stroke-width="${major ? 1.2 : 1}"/>`;
+    if (major) s += `<text x="${L - 8}" y="${y(v / 100) + 4}" text-anchor="end" font-size="12" fill="${css("--ink-3")}">${v}%</text>`;
+  }
+  for (let i = 0; i < n; i++) {
+    s += `<line x1="${x(i)}" x2="${x(i)}" y1="${T}" y2="${T + ph}" stroke="${css("--grid-2")}"/>`;
+  }
+  // lesson-count strip
+  const lc = [...epochs.map(e => e.lessons_alive), ...(control || []).map(e => e.lessons_alive), 1];
+  const maxL = Math.max(...lc), sy = T + ph + 30, sh = 40, bw = Math.min(14, (W - L - R) / n / 3);
+  s += `<text x="${L - 8}" y="${sy + sh}" text-anchor="end" font-size="11" fill="${css("--ink-3")}">0</text>`;
+  s += `<text x="${L - 8}" y="${sy + 8}" text-anchor="end" font-size="11" fill="${css("--ink-3")}">${maxL}</text>`;
+  s += `<text x="${L}" y="${sy - 10}" font-size="12" fill="${css("--ink-2")}">Lessons in memory</text>`;
+  epochs.forEach((e, i) => {
+    const h = sh * e.lessons_alive / maxL;
+    s += `<rect x="${x(i) - (control ? bw : bw / 2)}" y="${sy + sh - h}" width="${bw}" height="${h}" fill="${css("--teal")}" opacity=".75"><title>Scar Tissue epoch ${e.epoch}: ${e.lessons_alive} lessons</title></rect>`;
+  });
+  (control || []).forEach((e, i) => {
+    const h = sh * e.lessons_alive / maxL;
+    s += `<rect x="${x(i)}" y="${sy + sh - h}" width="${bw}" height="${h}" fill="${css("--ink-3")}" opacity=".45"><title>No pruning epoch ${e.epoch}: ${e.lessons_alive} lessons</title></rect>`;
+  });
+  for (let i = 0; i < n; i++) {
+    s += `<text x="${x(i)}" y="${H - 6}" text-anchor="middle" font-size="12" fill="${css("--ink-3")}">${i === 0 ? "baseline" : "epoch " + i}</text>`;
+  }
+  const trace = (rows, color, dash, width) => {
+    if (!rows || !rows.length) return "";
+    const pts = rows.map((e, i) => `${x(i)},${y(e.eval_pass_rate)}`).join(" ");
+    let t = `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="${width}" stroke-linejoin="round" ${dash ? 'stroke-dasharray="6 5"' : ""}/>`;
+    rows.forEach((e, i) => {
+      t += `<circle cx="${x(i)}" cy="${y(e.eval_pass_rate)}" r="${dash ? 3 : 5}" fill="${dash ? color : css("--sheet")}" stroke="${color}" stroke-width="${dash ? 0 : 2.5}"><title>epoch ${e.epoch}: ${e.eval_passed}/${e.eval_total} passed, ${e.lessons_alive} lessons</title></circle>`;
+    });
+    return t;
+  };
+  s += trace(control, css("--ink-3"), true, 2);
+  s += trace(epochs, css("--teal"), false, 3.5);
+  const last = epochs[epochs.length - 1];
+  if (last) {
+    const atEnd = epochs.length - 1 === n - 1, high = last.eval_pass_rate > 0.85;
+    const lx = atEnd ? x(epochs.length - 1) - 10 : x(epochs.length - 1) + 10;
+    const ly = high ? y(last.eval_pass_rate) + 22 : y(last.eval_pass_rate) - 10;
+    s += `<text x="${lx}" y="${ly}" text-anchor="${atEnd ? "end" : "start"}" font-size="13" font-weight="700" fill="${css("--teal")}">${last.eval_passed}/${last.eval_total}</text>`;
+  }
+  $("chart").innerHTML = s;
+}
+
+function lessonItem(l, dead) {
+  const fresh = !first && !seen.has(l.id + l.status) ? " fresh" : "";
+  seen.add(l.id + l.status);
+  const score = (l.helped || 0) + 0.05 * (l.reinforced || 0);
+  const probation = !dead && (l.trials === 0 || (l.helped || 0) <= 0);
+  const w = Math.max(3, Math.min(100, score * 25));
+  const meta = dead
+    ? `<span class="id">${esc(l.id)}</span><span>${esc(l.scope)}</span><span>born epoch ${l.created_epoch}, pruned epoch ${l.pruned_epoch}</span><span>from ${esc(l.source_task)}</span>`
+    : `<span class="id">${esc(l.id)}</span><span class="${l.scope === "global" ? "tag-global" : ""}">${l.scope === "global" ? "every task" : "retrieved per task"}</span>
+       <span class="score"><span class="bar"><span style="width:${w}%"></span></span>${probation ? "not proven yet" : "value " + score.toFixed(2)}</span>
+       <span>injected ${l.uses}×</span><span>from ${esc(l.source_task)}</span>`;
+  return `<li class="lesson${probation ? " probation" : ""}${fresh}"><p class="text">${esc(l.text)}</p>
+    <div class="meta">${meta}</div>${dead ? `<p class="reason">${esc(l.pruned_reason)}</p>` : ""}</li>`;
+}
+
+function render(st, control) {
+  const ep = st.epochs || [], meta = st.meta || {}, lessons = st.lessons || [];
+  const last = ep[ep.length - 1], base = ep[0];
+  const alive = lessons.filter(l => l.status === "alive").sort((a, b) => ((b.helped || 0) + .05 * b.reinforced) - ((a.helped || 0) + .05 * a.reinforced));
+  const dead = lessons.filter(l => l.status !== "alive").sort((a, b) => (b.pruned_epoch - a.pruned_epoch) || (b.created_at - a.created_at));
+
+  $("run").innerHTML = `<span class="pulse ${meta.running ? "on" : ""}"></span><strong>${meta.running ? "Running" : (ep.length ? "Idle" : "No runs yet")}</strong>${last ? `, ${ep.length - 1} epoch${ep.length === 2 ? "" : "s"} done` : ""}<br>
+    Solver ${esc(meta.solver || "–")}<br>Distiller ${esc(meta.distiller || "–")}<br>Memory ${esc(meta.store === "MongoStore" ? "MongoDB" : "local JSON")}`;
+
+  $("big").innerHTML = last ? `${pct(last.eval_pass_rate)}<small>%</small>` : "–";
+  $("bigcap").textContent = last ? `of held-out tasks passed on the first try${last.epoch ? ` after epoch ${last.epoch}` : " at baseline"}.` : "Start a run: python scar.py run --mock";
+  if (last) {
+    const pruned = lessons.length - alive.length;
+    $("facts").innerHTML = `<b>${pct(base.eval_pass_rate)}%</b><span>with empty memory</span>
+      <b>${alive.length}</b><span>lessons alive</span><b>${pruned}</b><span>lessons pruned</span>
+      ${control && control.length ? `<b>${pct(control[control.length - 1].eval_pass_rate)}%</b><span>keeping every lesson</span>` : ""}`;
+  }
+  $("legend").innerHTML = `<span><i></i>Scar Tissue</span>` + (control && control.length ? `<span><i class="ctl"></i>Same agent, no pruning</span>` : "");
+  chart(ep, control && control.length ? control : null);
+
+  // house rules: judged by the hidden convention tags on held-out failures
+  const convs = meta.conventions ? Object.keys(meta.conventions) : Object.keys(RULE_NAMES);
+  const broken = last ? new Set(Object.keys(last.eval_fail_convs || {})) : null;
+  const held = broken ? convs.filter(c => !broken.has(c)).length : 0;
+  $("rulecount").textContent = last ? `${held} of ${convs.length}` : "";
+  $("chips").innerHTML = convs.map(c => `<span class="chip ${!last ? "" : broken.has(c) ? "broken" : "held"}" title="${esc((meta.conventions || {})[c] || "")}">${esc(RULE_NAMES[c] || c)}</span>`).join("");
+
+  $("alive").innerHTML = alive.length ? alive.map(l => lessonItem(l, false)).join("") : `<li class="empty">No lessons yet. The first failures will write them.</li>`;
+  $("dead").innerHTML = dead.length ? dead.map(l => lessonItem(l, true)).join("") : `<li class="empty">Nothing pruned yet. Ablation runs after the first training epoch.</li>`;
+
+  // eval grid
+  const ids = ep.length ? Object.keys(ep[0].eval_tasks || {}).sort() : [];
+  let g = `<tr><th class="task"></th>${ep.map(e => `<th>${e.epoch === 0 ? "base" : e.epoch}</th>`).join("")}</tr>`;
+  for (const id of ids) {
+    g += `<tr><th class="task">${esc(id)}</th>${ep.map(e => {
+      const r = (e.eval_tasks || {})[id];
+      if (!r) return "<td></td>";
+      return `<td><span class="cell ${r.passed ? "pass" : "fail"}" title="${esc(r.passed ? "passed" : r.first_fail)}"></span></td>`;
+    }).join("")}</tr>`;
+  }
+  $("evalgrid").innerHTML = ids.length ? g : `<tr><td class="empty">Waiting for the baseline run.</td></tr>`;
+
+  const KIND = { lesson: "learned", prune: "pruned", keep: "kept", dedupe: "seen again", train_fail: "failed",
+                 train_pass: "passed", eval: "eval", epoch: "epoch", phase: "phase" };
+  const evs = (st.events || []).filter(e => e.kind !== "eval" && e.kind !== "train_pass").slice(-60).reverse();
+  $("log").innerHTML = evs.map(e => `<li class="ev-${esc(e.kind)}"><span class="k ${esc(e.kind)}">${esc(KIND[e.kind] || e.kind)}</span><span class="m">${esc(e.msg)}</span></li>`).join("")
+    || `<li><span class="k"></span><span class="m">Quiet so far.</span></li>`;
+  first = false;
+}
+
+async function tick() {
+  try {
+    const [st, ctl] = await Promise.all([fetch("/api/state").then(r => r.json()), fetch("/api/control").then(r => r.json())]);
+    if (!st.error) render(st, ctl);
+  } catch (e) {
+    $("run").textContent = "Dashboard can't reach the server. Is scar.py serve running?";
+  }
+  setTimeout(tick, 1500);
+}
+tick();
+</script>
+</body>
+</html>

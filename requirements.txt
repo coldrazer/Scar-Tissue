@@ -1,0 +1,4 @@
+# The core loop, mock mode, dashboard and all model providers use only the Python standard library.
+# Optional extras:
+pymongo>=4.6     # MONGODB_URI storage
+uagents>=0.20    # agents/fetch_agent.py (Fetch.ai)

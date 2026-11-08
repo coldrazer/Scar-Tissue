@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/coldrazer/Scar-Tissue/docs/fetch-schema.json",
+  "title": "Scar Tissue Fetch.ai front-end schema",
+  "description": "Message contract for the Scar Tissue Fetch.ai uAgent (agents/fetch_agent.py). Other coding agents and UIs integrate against this schema. The agent serves only published lessons: rules distilled from failures, kept because removing them measurably lowered the pass rate (ablation), then promoted after a passing held-out evaluation.",
+  "version": "1.0.0",
+  "transport": {
+    "uagent_message": "LessonQuery -> LessonReply",
+    "http": "POST /lessons with a LessonQuery JSON body, returns a LessonReply JSON body",
+    "auth": "When SCAR_AGENT_TOKEN is set on the agent, LessonQuery.token must match it; unauthorized queries return an empty lessons list with alive/pruned counts only."
+  },
+  "definitions": {
+    "LessonQuery": {
+      "type": "object",
+      "required": ["task"],
+      "additionalProperties": false,
+      "properties": {
+        "task": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Natural-language description of the caller's task. Matched against lesson embeddings (vector cosine; Atlas $vectorSearch when configured)."
+        },
+        "k": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8,
+          "default": 3,
+          "description": "Maximum number of specific lessons to return, plus up to 2 global lessons."
+        },
+        "token": {
+          "type": "string",
+          "default": "",
+          "description": "Shared token; required only when the agent sets SCAR_AGENT_TOKEN."
+        },
+        "canary": {
+          "type": "boolean",
+          "default": false,
+          "description": "When true, the reply may additionally include at most one canary lesson (survived ablation, not yet promoted by a passing held-out eval)."
+        }
+      }
+    },
+    "Lesson": {
+      "type": "object",
+      "required": ["id", "text", "scope", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^les_[0-9]+$", "description": "Stable lesson id, e.g. les_0007."},
+        "text": {"type": "string", "description": "The rule to inject into the caller's prompt."},
+        "scope": {"type": "string", "enum": ["global", "specific"], "description": "global = applies to every task; specific = retrieved for this task by vector similarity."},
+        "value": {"type": "number", "description": "Measured value: cumulative ablation delta plus 0.05 per re-discovery. Higher passed more with/without probes."}
+      }
+    },
+    "LessonReply": {
+      "type": "object",
+      "required": ["lessons", "alive", "pruned"],
+      "additionalProperties": false,
+      "properties": {
+        "lessons": {"type": "array", "items": {"$ref": "#/definitions/Lesson"}, "description": "Published lessons ranked by measured value (best first); at most one canary lesson when the query set canary=true."},
+        "alive": {"type": "integer", "minimum": 0, "description": "Lessons currently alive in the library (canary + published + held)."},
+        "pruned": {"type": "integer", "minimum": 0, "description": "Lessons deleted by ablation or retired by governance."}
+      }
+    }
+  },
+  "examples": [
+    {
+      "query": {"task": "write a function that splits a bill between people", "k": 3},
+      "reply": {
+        "lessons": [
+          {"id": "les_0007", "text": "When splitting a total evenly into shares, give the leftover remainder to the first shares, one each: 1000 split 3 ways -> [334, 333, 333].", "scope": "specific", "value": 1.24}
+        ],
+        "alive": 8,
+        "pruned": 14
+      }
+    }
+  ]
+}
